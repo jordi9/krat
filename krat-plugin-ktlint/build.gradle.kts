@@ -1,7 +1,7 @@
 plugins {
   `java-gradle-plugin`
   `maven-publish`
-  kotlin("jvm") version "2.3.0"
+  kotlin("jvm") version "2.3.10"
 }
 
 group = "com.jordi9"
@@ -28,8 +28,8 @@ gradlePlugin {
 
 dependencies {
   testImplementation(gradleTestKit())
-  testImplementation("io.kotest:kotest-runner-junit5:5.9.1")
-  testImplementation("io.kotest:kotest-assertions-core:5.9.1")
+  testImplementation("io.kotest:kotest-runner-junit5:6.1.4")
+  testImplementation("io.kotest:kotest-assertions-core:6.1.4")
 }
 
 tasks.withType<Test>().configureEach {
