@@ -66,7 +66,3 @@ class MyServiceTest : StringSpec({
 ## Examples
 
 See [OpenTelemetryTestProviderShould.kt](src/test/kotlin/krat/otel/testlib/OpenTelemetryTestProviderShould.kt).
-
-## License
-
-MIT

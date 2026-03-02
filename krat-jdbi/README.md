@@ -101,7 +101,3 @@ val dbConfig: DatabaseConfig = config("database")
 ## Examples
 
 See [JdbiProviderTest.kt](src/test/kotlin/krat/jdbi/JdbiProviderTest.kt) and [JdbiExtensionsTest.kt](src/test/kotlin/krat/jdbi/JdbiExtensionsTest.kt).
-
-## License
-
-MIT

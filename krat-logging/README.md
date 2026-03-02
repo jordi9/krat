@@ -38,7 +38,3 @@ Benefits:
 ## Testing
 
 Use [krat-logging-testlib](../krat-logging-testlib) to capture and assert on log events in tests.
-
-## License
-
-MIT

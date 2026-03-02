@@ -53,7 +53,3 @@ Can be applied to:
 - Local variables
 - Value parameters
 - Types
-
-## License
-
-MIT

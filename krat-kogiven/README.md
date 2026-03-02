@@ -122,7 +122,3 @@ Generic type parameters ensure your stages work with the correct context type.
 ## Examples
 
 See [KogivenStringSpecShould.kt](src/test/kotlin/kogiven/KogivenStringSpecShould.kt) and [KogivenSpecificStages.kt](src/test/kotlin/kogiven/KogivenSpecificStages.kt).
-
-## License
-
-MIT

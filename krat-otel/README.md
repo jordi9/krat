@@ -122,7 +122,3 @@ Use [krat-otel-testlib](../krat-otel-testlib) for in-memory span capture in test
 ## Examples
 
 See [OpenTelemetryProviderTest.kt](src/test/kotlin/krat/otel/OpenTelemetryProviderTest.kt) and [LoggingSpanProcessorTest.kt](src/test/kotlin/krat/otel/LoggingSpanProcessorTest.kt).
-
-## License
-
-MIT

@@ -126,7 +126,3 @@ val port: Int = config("server.port")
 ## Examples
 
 See [HealthCheckTest.kt](src/test/kotlin/krat/pack/core/HealthCheckTest.kt) for comprehensive usage examples.
-
-## License
-
-MIT

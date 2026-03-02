@@ -22,7 +22,3 @@ fun Application.module() {
 ```
 
 The `allowAnyLocalhost` option allows any `localhost:*` origin while rejecting malicious lookalikes like `localhost.evil.com`.
-
-## License
-
-MIT
