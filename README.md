@@ -1,29 +1,54 @@
 # krat
 
-Kotlin utilities for Ktor applications, inspired by [Ratpack](https://ratpack.io).
+A Kotlin library monorepo — small, focused utilities for backend applications. The `krat-pack-*` modules bring [Ratpack](https://ratpack.io)-inspired patterns to [Ktor](https://ktor.io). The rest of the pack works anywhere.
 
-## Modules
+## The Rat Pack
+
+Ktor primitives inspired by the elegance of Ratpack.
 
 | Module | Description |
 |--------|-------------|
 | [krat-pack-core](krat-pack-core/) | Handler, Route, Service, HealthCheck, SseHandler |
-| [krat-pack-cors](krat-pack-cors/) | CORS configuration |
+| [krat-pack-cors](krat-pack-cors/) | CORS configuration for Ktor |
+
+## Observability
+
+OpenTelemetry utilities — no Ktor dependency required.
+
+| Module | Description |
+|--------|-------------|
 | [krat-otel](krat-otel/) | OpenTelemetry provider, tracer/span extensions, NoiseSampler |
 | [krat-otel-canonical-traces](krat-otel-canonical-traces/) | Canonical trace log line processor |
 | [krat-otel-testlib](krat-otel-testlib/) | In-memory span capture for testing |
-| [krat-jdbi](krat-jdbi/) | JDBI provider with HikariCP and Loom support |
-| [krat-time](krat-time/) | TimeClock abstraction |
-| [krat-time-testlib](krat-time-testlib/) | Fixed and advancing time for testing |
+
+## Utilities
+
+Framework-agnostic building blocks.
+
+| Module | Description |
+|--------|-------------|
+| [krat-jdbi](krat-jdbi/) | JDBI provider with HikariCP, Micrometer, and Loom support |
 | [krat-logging](krat-logging/) | KotlinLogging typealias |
-| [krat-logging-testlib](krat-logging-testlib/) | Log event capture for Kotest |
+| [krat-time](krat-time/) | TimeClock interface for testable time access |
 | [krat-gag](krat-gag/) | YOLO annotation |
+
+## Testing
+
+| Module | Description |
+|--------|-------------|
 | [krat-kogiven](krat-kogiven/) | Kotest BDD scenario specs |
+| [krat-logging-testlib](krat-logging-testlib/) | Log event capture for Kotest |
+| [krat-time-testlib](krat-time-testlib/) | Fixed and advancing time implementations |
 
 ## Installation
+
+All modules are published independently to Maven Central as `com.jordi9:{module}:{version}`.
 
 ```kotlin
 dependencies {
     implementation("com.jordi9:krat-pack-core:$version")
+    implementation("com.jordi9:krat-otel:$version")
+    testImplementation("com.jordi9:krat-kogiven:$version")
 }
 ```
 
