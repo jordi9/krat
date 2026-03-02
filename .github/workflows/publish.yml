@@ -1,0 +1,61 @@
+name: Publish Library
+
+on:
+  push:
+    tags:
+      - '*/v*'
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Parse tag
+        id: parse
+        run: |
+          TAG=${GITHUB_REF#refs/tags/}
+          LIBRARY=${TAG%/v*}
+          VERSION=${TAG#*/v}
+          echo "library=$LIBRARY" >> $GITHUB_OUTPUT
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Publishing $LIBRARY version $VERSION"
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: corretto
+          java-version: 24
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Publish ${{ steps.parse.outputs.library }} to Maven Central
+        run: |
+          ./gradlew :${{ steps.parse.outputs.library }}:publishAndReleaseToMavenCentral \
+            -Pversion=${{ steps.parse.outputs.version }}
+        env:
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
+          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.GPG_SIGNING_KEY }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.GPG_SIGNING_PASSWORD }}
+
+      - name: Generate release notes
+        uses: orhun/git-cliff-action@v4
+        id: notes
+        with:
+          args: --include-path "${{ steps.parse.outputs.library }}/**"
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RELEASE_TAG: ${{ github.ref_name }}
+          RELEASE_NOTES: ${{ steps.notes.outputs.content }}
+        run: |
+          gh release create "$RELEASE_TAG" \
+            --title "$RELEASE_TAG" \
+            --notes "$RELEASE_NOTES"

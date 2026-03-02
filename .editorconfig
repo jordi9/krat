@@ -1,0 +1,18 @@
+root = true
+
+[*.{kt,kts}]
+max_line_length = 120
+indent_style = space
+indent_size = 2
+ktlint_code_style = intellij_idea
+ktlint_standard_comment-spacing = disabled
+ktlint_standard_discouraged-comment-location = disabled
+ktlint_standard_class-signature = disabled
+ktlint_function_signature_body_expression_wrapping = default
+ij_kotlin_allow_trailing_comma_on_call_site = false
+ij_kotlin_allow_trailing_comma = false
+
+[*.md]
+max_line_length = 120
+indent_style = space
+indent_size = 2
