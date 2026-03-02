@@ -48,4 +48,4 @@ sqlite-jdbc = "org.xerial:sqlite-jdbc:3.47.2.0"
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
-vanniktech-publish = { id = "com.vanniktech.maven.publish", version = "0.30.0" }
+vanniktech-publish = { id = "com.vanniktech.maven.publish", version = "0.36.0" }
