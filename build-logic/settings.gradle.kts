@@ -4,8 +4,6 @@ plugins {
 
 rootProject.name = "build-logic"
 
-includeBuild("../krat-plugin-ktlint")
-
 dependencyResolutionManagement {
   repositories {
     gradlePluginPortal()

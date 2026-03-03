@@ -1,6 +1,13 @@
 plugins {
   kotlin("jvm")
-  id("krat.ktlint")
+  id("com.diffplug.spotless")
+}
+
+spotless {
+  ratchetFrom("origin/main")
+  kotlin {
+    ktlint("1.8.0")
+  }
 }
 
 repositories {

@@ -5,7 +5,7 @@ Krat: Kotlin library monorepo with shared utilities for Ktor applications, publi
 ## Build Commands
 
 ```bash
-./gradlew ktlintFormat   # Format code (always run first)
+./gradlew spotlessApply  # Format code (always run first)
 ./gradlew build          # Build all modules
 ./gradlew test           # Run all tests
 ./gradlew :module:test   # Run tests for specific module
@@ -67,7 +67,7 @@ Maven coordinates: `com.jordi9:{module}:{version}`
 
 All modules use convention plugins from `build-logic/`:
 
-- `krat.kotlin-library` - Kotlin/JVM setup, Java 24, ktlint, Kotest
+- `krat.kotlin-library` - Kotlin/JVM setup, Java 24, Spotless (ktlint), Kotest
 - `krat.maven-publish` - Publish to Maven Central (vanniktech/maven-publish, GPG signing)
 
 ## Tech Stack

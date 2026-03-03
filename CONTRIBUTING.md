@@ -21,7 +21,7 @@ Open an issue first so it can be discussed. This avoids wasted effort on things 
 1. Fork the repo
 2. Create a branch from `main`
 3. Make your changes
-4. Run `./gradlew ktlintFormat` then `./gradlew build`
+4. Run `./gradlew spotlessApply` then `./gradlew build`
 5. Open a PR
 
 Keep PRs small and focused. One concern per PR.
@@ -32,7 +32,7 @@ Follow the structure in [CLAUDE.md](CLAUDE.md#adding-a-new-module). Every module
 
 ## Code style
 
-- Run `./gradlew ktlintFormat` before committing
+- Run `./gradlew spotlessApply` before committing
 - Write tests with [Kotest](https://kotest.io) and [kogiven](krat-kogiven/) for BDD scenarios
 - Less is more — expose as little as possible
 - Keep things simple — if a module needs a long README to explain, it's probably too complex
