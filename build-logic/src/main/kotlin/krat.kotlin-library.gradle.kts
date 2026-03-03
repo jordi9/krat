@@ -18,6 +18,14 @@ kotlin {
   jvmToolchain(24)
 }
 
+tasks.register("ktlintFormat") {
+  dependsOn("spotlessApply")
+}
+
+tasks.register("ktlintCheck") {
+  dependsOn("spotlessCheck")
+}
+
 tasks.withType<Test>().configureEach {
   useJUnitPlatform()
   jvmArgs("--enable-native-access=ALL-UNNAMED")
