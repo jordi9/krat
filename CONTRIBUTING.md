@@ -20,9 +20,10 @@ Open an issue first so it can be discussed. This avoids wasted effort on things 
 
 1. Fork the repo
 2. Create a branch from `main`
-3. Make your changes
-4. Run `./gradlew spotlessApply` then `./gradlew build`
-5. Open a PR
+3. Set up git hooks: `git config core.hooksPath .githooks`
+4. Make your changes
+5. Run `./gradlew spotlessApply` then `./gradlew build`
+6. Open a PR
 
 Keep PRs small and focused. One concern per PR.
 

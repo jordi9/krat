@@ -1,0 +1,38 @@
+#!/bin/sh
+######## SPOTLESS HOOK START ########
+set +e
+
+CHANGED_FILES="$(git --no-pager diff --name-status --no-color --cached | awk '$1 != "D" && $NF ~ /\.kts?$/ { print $NF }')"
+
+if [ -z "$CHANGED_FILES" ]; then
+  exit 0
+fi
+
+echo "Running spotless over staged files..."
+
+# Stash unstaged changes
+diff=.git/unstaged-spotless.diff
+git diff --binary --color=never > $diff
+if [ -s $diff ]; then
+  git apply -R $diff
+fi
+
+# Run spotless
+./gradlew spotlessApply --quiet
+exit_code=$?
+
+# Re-add formatted files
+echo "$CHANGED_FILES" | while read -r file; do
+  if [ -f "$file" ]; then
+    git add "$file"
+  fi
+done
+
+# Restore unstaged changes
+if [ -s $diff ]; then
+  git apply --ignore-whitespace $diff
+fi
+rm -f $diff
+
+exit $exit_code
+######## SPOTLESS HOOK END ########
