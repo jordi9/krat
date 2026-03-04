@@ -16,9 +16,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v6
-
-      - name: Fetch origin/main for Spotless ratchet
-        run: git fetch origin main
+      - run: git fetch origin main
 
       - name: Set up JDK
         uses: actions/setup-java@v5

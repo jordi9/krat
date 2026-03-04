@@ -40,6 +40,10 @@ Framework-agnostic building blocks.
 | [krat-logging-testlib](krat-logging-testlib/) | Log event capture for Kotest |
 | [krat-time-testlib](krat-time-testlib/) | Fixed and advancing time implementations |
 
+## Getting Started
+
+Check out [krat-skeleton](https://github.com/jordi9/krat-skeleton) — a Kotlin REST API template using Ktor and hexagonal architecture that demonstrates how to use krat modules together.
+
 ## Installation
 
 All modules are published independently to Maven Central as `com.jordi9:{module}:{version}`.
