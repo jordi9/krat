@@ -1,94 +1,86 @@
 # kogiven
 
-BDD-style Given/When/Then test support for [Kotest](https://kotest.io/).
+BDD-style acceptance testing for [Kotest](https://kotest.io/).
+
+Kogiven provides the Given/When/Then structure for writing component tests that exercise your application from the outside — through its public HTTP API, against a real (in-memory) database, with external dependencies stubbed. Tests read like specifications and run the same code path as production.
+
+Inspired by [JGiven](https://jgiven.org/) and the acceptance testing patterns from [Growing Object-Oriented Software, Guided by Tests](http://www.growing-object-oriented-software.com/) by Nat Pryce and Steve Freeman.
 
 ## Installation
 
 ```kotlin
 dependencies {
-    testImplementation("krat:kogiven:$version")
+    testImplementation("com.jordi9:krat-kogiven:$version")
 }
 ```
 
-## Usage
+## Writing Acceptance Tests
 
-### Define Your Stages
+### 1. Define a Context
 
-Create stage classes that extend `StageContext`:
+The context carries state between stages within a single test:
 
 ```kotlin
-// Shared context between stages
 class OrderContext {
-    lateinit var order: Order
-    lateinit var result: OrderResult
-    var discount: Double = 0.0
+    lateinit var status: HttpStatusCode
+    lateinit var response: JsonResponse
+    var insertedOrderId: OrderId by required()
 }
+```
 
-class Given : StageContext<Given, OrderContext>() {
-    fun `an order with items`() = apply {
-        ctx.order = Order(items = listOf(Item("Widget", 100)))
-    }
+### 2. Define Stages
 
-    fun `a premium customer discount`() = apply {
-        ctx.discount = 0.10
-    }
-}
+Each stage is a class with methods that read like natural language:
 
-class When : StageContext<When, OrderContext>() {
-    fun `the order is submitted`() = apply {
-        ctx.result = orderService.submit(ctx.order, ctx.discount)
+```kotlin
+class GivenOrder : StageContext<GivenOrder, OrderContext>() {
+    fun `an order exists`(name: String) = apply {
+        val row = Orders.inserted(name = name)
+        ctx.insertedOrderId = row.id
     }
 }
 
-class Then : StageContext<Then, OrderContext>() {
-    fun `the order is confirmed`() = apply {
-        ctx.result.status shouldBe OrderStatus.CONFIRMED
+class WhenOrder : StageContext<WhenOrder, OrderContext>() {
+    suspend fun `listing all orders`() = apply {
+        val response = httpClient().get("/api/v1/orders")
+        ctx.status = response.status
+        ctx.response = response.toJsonResponse()
+    }
+}
+
+class ThenOrder : StageContext<ThenOrder, OrderContext>() {
+    fun `the response is successful`() = apply {
+        ctx.status shouldBe HttpStatusCode.OK
     }
 
-    fun `discount is applied`() = apply {
-        ctx.result.total shouldBe 90.0
+    fun `orders are returned`(count: Int) = apply {
+        ctx.response.items().size shouldBe count
     }
 }
 ```
 
-### Write Tests
+### 3. Write Scenarios
 
-Use `ScenarioStringSpec` or `ScenarioFunSpec`:
+Scenarios stay clean — all implementation details live in stages:
 
 ```kotlin
-class OrderTest : ScenarioStringSpec<Given, When, Then, OrderContext>({
+class OrderShould : ScenarioStringSpec<GivenOrder, WhenOrder, ThenOrder, OrderContext>({
 
-    "order with discount is processed correctly" {
-        Given.`an order with items`()
-            .and().`a premium customer discount`()
-        When.`the order is submitted`()
-        Then.`the order is confirmed`()
-            .and().`discount is applied`()
-    }
-
-    "order without discount uses full price" {
-        Given.`an order with items`()
-        When.`the order is submitted`()
-        Then.`the order is confirmed`()
+    "return orders after creating them" {
+        Given.`an order exists`("Widget")
+        When.`listing all orders`()
+        Then.`the response is successful`()
+            .and().`orders are returned`(1)
     }
 })
 ```
 
-Or with FunSpec style:
+### File Organization
 
-```kotlin
-class OrderTest : ScenarioFunSpec<Given, When, Then, OrderContext>({
-
-    test("order with discount is processed correctly") {
-        Given.`an order with items`()
-            .and().`a premium customer discount`()
-
-        When.`the order is submitted`()
-
-        Then.`the order is confirmed`()
-            .and().`discount is applied`()
-    }
-})
+```
+app/src/test/kotlin/scenario/
+├── OrderStages.kt    # Context + Given/When/Then stages
+└── OrderShould.kt    # Test scenarios only
 ```
 
 ## Features
@@ -105,20 +97,54 @@ Given.`a user`()
 
 ### Fresh Context Per Test
 
-Each test gets a fresh context instance - stages are automatically reset between tests.
+Each test gets a fresh context instance — stages are automatically reset between tests.
 
 ### Type-Safe Stages
 
 Generic type parameters ensure your stages work with the correct context type.
 
-## Why kogiven?
+### FunSpec Support
 
-- **Clean separation** - Given/When/Then stages are distinct classes
-- **Reusable steps** - Stage methods can be composed across tests
-- **Readable tests** - Backtick method names read like documentation
-- **Shared state** - Context object flows through all stages
-- **Kotest integration** - Works with Kotest's lifecycle and assertions
+```kotlin
+class OrderShould : ScenarioFunSpec<GivenOrder, WhenOrder, ThenOrder, OrderContext>({
+    test("return orders after creating them") {
+        Given.`an order exists`("Widget")
+        When.`listing all orders`()
+        Then.`the response is successful`()
+    }
+})
+```
+
+## The Acceptance Testing Approach
+
+Kogiven is designed for component tests that sit at the center of the [testing honeycomb](https://engineering.atspotify.com/2018/01/testing-of-microservices/):
+
+```
+       ┌─────────────────┐
+       │   E2E (few)     │
+       ├─────────────────┤
+  ████████████████████████  ← Component tests (primary)
+       ├─────────────────┤
+       │  Unit (sparse)  │
+       └─────────────────┘
+```
+
+The key idea: tests exercise the full application stack (HTTP handlers, use cases, repositories, database) with only external dependencies stubbed. This gives high confidence with fast, reliable tests.
+
+### What Makes a Good Acceptance Test
+
+- **Same code as production** — no test-only modules or conditional logic
+- **Real database** — in-memory SQLite/H2, not mocked
+- **External ports stubbed** — HTTP clients, notification services, file systems
+- **Test through the public API** — HTTP requests in, HTTP responses out
+- **Scenarios read like specs** — anyone can understand what's being tested
+
+## Companion Libraries
+
+- **[krat-pack-testlib](../krat-pack-testlib)** — HTTP response assertion helpers (`JsonResponse`, `toJsonResponse()`)
+- **[krat-otel-testlib](../krat-otel-testlib)** — In-memory OpenTelemetry span capture
+- **[krat-time-testlib](../krat-time-testlib)** — Fixed time for deterministic tests
 
 ## Examples
 
-See [KogivenStringSpecShould.kt](src/test/kotlin/kogiven/KogivenStringSpecShould.kt) and [KogivenSpecificStages.kt](src/test/kotlin/kogiven/KogivenSpecificStages.kt).
+See [KogivenStringSpecShould.kt](src/test/kotlin/com/jordi9/kogiven/KogivenStringSpecShould.kt) and [KogivenSpecificStages.kt](src/test/kotlin/com/jordi9/kogiven/KogivenSpecificStages.kt).

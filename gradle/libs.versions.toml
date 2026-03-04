@@ -12,6 +12,7 @@ ktor-server-core = { module = "io.ktor:ktor-server-core-jvm" }
 ktor-server-cors = { module = "io.ktor:ktor-server-cors" }
 ktor-server-sse = { module = "io.ktor:ktor-server-sse" }
 ktor-server-test-host = { module = "io.ktor:ktor-server-test-host-jvm" }
+ktor-client-core = { module = "io.ktor:ktor-client-core" }
 
 kotest-bom = { module = "io.kotest:kotest-bom", version.ref = "kotest" }
 kotest-runner-junit5 = { module = "io.kotest:kotest-runner-junit5" }

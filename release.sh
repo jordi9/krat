@@ -27,6 +27,7 @@ MODULES=(
   "krat-logging-testlib"
   "krat-time-testlib"
   "krat-otel-testlib"
+  "krat-pack-testlib"
   "krat-kogiven"
 )
 

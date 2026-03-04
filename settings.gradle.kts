@@ -11,6 +11,7 @@ rootProject.name = "krat"
 // Ratpack-inspired modules
 include("krat-pack-core")
 include("krat-pack-cors")
+include("krat-pack-testlib")
 
 include("krat-kogiven")
 include("krat-gag")
