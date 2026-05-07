@@ -19,7 +19,6 @@ MODULES=(
   "krat-pack-core"
   "krat-pack-cors"
   "krat-otel"
-  "krat-otel-canonical-traces"
   "krat-logging"
   "krat-time"
   "krat-gag"
