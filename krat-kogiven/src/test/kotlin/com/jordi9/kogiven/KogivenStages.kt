@@ -10,7 +10,6 @@ class Given : StageContext<Given, TestContext>() {
   }
 
   fun `an empty context`() = apply {
-    ctx.isNotInitialized() shouldBe true
     ctx.baz shouldBe "some default"
   }
 
@@ -50,7 +49,7 @@ class Then : StageContext<Then, TestContext>() {
   }
 
   fun `error happened`() {
-    shouldThrow<UninitializedPropertyAccessException> {
+    shouldThrow<IllegalStateException> {
       ctx.userId
     }
   }
@@ -62,12 +61,10 @@ class Then : StageContext<Then, TestContext>() {
 
 class TestContext {
 
-  lateinit var userId: String
-  lateinit var status: Status
+  var userId: String by required()
+  var status: Status by required()
   var bar: List<String> = emptyList()
   var baz: String = "some default"
-
-  fun isNotInitialized(): Boolean = this::userId.isInitialized.not()
 }
 
 enum class Status {
