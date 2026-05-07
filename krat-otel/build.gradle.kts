@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "com.jordi9"
-description = "OpenTelemetry provider, tracer extensions, and span utilities for Ktor"
+description = "OpenTelemetry provider, tracer extensions, span utilities, and canonical trace logging for Ktor"
 
 dependencies {
   api(platform(libs.opentelemetry.bom))
@@ -17,6 +17,7 @@ dependencies {
   implementation(libs.opentelemetry.exporter.otlp)
   implementation(libs.opentelemetry.semconv)
   implementation(libs.kotlinx.coroutines.core)
+  implementation(libs.caffeine)
   implementation(libs.slf4j.api)
   implementation(libs.slf4j.jul)
   compileOnly(libs.logback)

@@ -11,7 +11,7 @@ import io.opentelemetry.semconv.ServiceAttributes
 
 class OpenTelemetryProviderTest : StringSpec({
 
-  val logs = extension(LogEventsExtension("TraceLog"))
+  val logs = extension(LogEventsExtension(CANONICAL_LOGGER))
 
   "creates valid OpenTelemetry instance" {
     val provider = OpenTelemetryProvider(

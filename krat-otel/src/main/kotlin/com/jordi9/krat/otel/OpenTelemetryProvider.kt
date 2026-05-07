@@ -23,7 +23,9 @@ class OpenTelemetryProvider(
     SLF4JBridgeHandler.removeHandlersForRootLogger()
     SLF4JBridgeHandler.install()
 
-    maybeConfigureLogfmt(config.logFormat)
+    if (config.logFormat == LogFormat.LOGFMT) {
+      configureLogfmt()
+    }
   }
 
   private val openTelemetrySdk: OpenTelemetrySdk by lazy {

@@ -1,101 +1,25 @@
 # CLAUDE.md
 
-Krat: Kotlin library monorepo with shared utilities for Ktor applications, published to Maven Central.
+Krat is a Kotlin library monorepo with shared utilities for Ktor applications, published to Maven Central.
 
-## Build Commands
+## Conventions
 
-```bash
-./gradlew spotlessApply  # Format code (always run first)
-./gradlew build          # Build all modules
-./gradlew test           # Run all tests
-./gradlew :module:test   # Run tests for specific module
-```
-
-## Module Structure
-
-### Ratpack-inspired (`com.jordi9.krat.pack.*`)
-
-| Module | Package | Description |
-|--------|---------|-------------|
-| krat-pack-core | `com.jordi9.krat.pack.core` | Handler, Route, Service, HealthCheck, SseHandler, Config |
-| krat-pack-cors | `com.jordi9.krat.pack.cors` | CorsConfig, installCors |
-
-### OpenTelemetry (`com.jordi9.krat.otel.*`)
-
-| Module | Package | Description |
-|--------|---------|-------------|
-| krat-otel | `com.jordi9.krat.otel` | OpenTelemetryProvider, TracerExtensions, SpanExtensions, NoiseSampler |
-| krat-otel-canonical-traces | `com.jordi9.krat.otel.canonicaltraces` | LoggingSpanProcessor (canonical log lines) |
-
-### Utilities (`com.jordi9.krat.*`)
-
-| Module | Package | Description |
-|--------|---------|-------------|
-| krat-logging | `com.jordi9.krat.logging` | KotlinLogging typealias |
-| krat-time | `com.jordi9.krat.time` | TimeClock interface, SystemTime |
-| krat-gag | `com.jordi9.krat.gag` | YOLO annotation |
-| krat-jdbi | `com.jordi9.krat.jdbi` | JdbiProvider, JdbiExtensions (Loom), DatabaseConfig |
-
-### Testing
-
-| Module | Package | Description |
-|--------|---------|-------------|
-| krat-kogiven | `com.jordi9.kogiven` | Kotest BDD (ScenarioStringSpec, ScenarioFunSpec) |
-| krat-otel-testlib | `com.jordi9.krat.otel.testlib` | OpenTelemetryTestProvider for in-memory span capture |
-| krat-logging-testlib | `com.jordi9.krat.logging` | LogEventsExtension for Kotest |
-| krat-time-testlib | `com.jordi9.krat.time` | FixedTime, AdvancingTime |
+- Always `./gradlew spotlessApply` before committing — a pre-commit hook enforces it (`.githooks/pre-commit`).
+- Modules apply two convention plugins from `build-logic/`:
+  - `krat.kotlin-library` — Kotlin/JVM, Spotless (ktlint), Kotest.
+  - `krat.maven-publish` — vanniktech publishing + GPG signing.
+- Tests use Kotest `StringSpec`.
 
 ## Publishing
 
-Tag-based publishing to Maven Central. Tag format: `{module}/v{version}`
+Tag-based to Maven Central. Tag format: `{module}/v{version}` (e.g. `krat-pack-core/v0.4.0`).
 
-```bash
-# Example: publish krat-pack-core version 0.4.0
-git tag krat-pack-core/v0.4.0
-git push origin krat-pack-core/v0.4.0
-```
+CI parses the tag, runs `./gradlew :{module}:publishAndReleaseToMavenCentral -Pversion={version}`, generates release notes with git-cliff, and creates a GitHub release.
 
-CI automatically:
-1. Parses tag to extract module and version
-2. Runs `./gradlew :{module}:publishAndReleaseToMavenCentral -Pversion={version}`
-3. Generates release notes with git-cliff
-4. Creates GitHub release
+Maven coordinates: `com.jordi9:{module}:{version}`.
 
-Maven coordinates: `com.jordi9:{module}:{version}`
+## Adding a module
 
-## Convention Plugins
-
-All modules use convention plugins from `build-logic/`:
-
-- `krat.kotlin-library` - Kotlin/JVM setup, Java 24, Spotless (ktlint), Kotest
-- `krat.maven-publish` - Publish to Maven Central (vanniktech/maven-publish, GPG signing)
-
-## Tech Stack
-
-- Kotlin 2.3.0, Java 25
-- Ktor 3.3.2
-- Kotest 6.0.5
-- JDBI 3.49.5
-- OpenTelemetry 1.57.0
-- Micrometer 1.15.0
-
-## Adding a New Module
-
-1. Create directory: `krat-{name}/`
-2. Add `build.gradle.kts`:
-   ```kotlin
-   plugins {
-     id("krat.kotlin-library")
-     id("krat.maven-publish")
-   }
-
-   group = "com.jordi9"
-   description = "Short description for Maven POM"
-
-   dependencies {
-     // your dependencies
-   }
-   ```
-3. Add to `settings.gradle.kts`: `include("krat-{name}")`
-4. Create source: `src/main/kotlin/com/jordi9/krat/{name}/`
-5. Create tests: `src/test/kotlin/com/jordi9/krat/{name}/`
+1. `mkdir krat-{name}` and add a `build.gradle.kts` applying `krat.kotlin-library` + `krat.maven-publish`. Set `group = "com.jordi9"` and `description = "..."` (used for the POM). Copy the shape from any existing module.
+2. Add `include("krat-{name}")` to `settings.gradle.kts`.
+3. Sources go in `src/main/kotlin/com/jordi9/krat/{name}/`, tests mirror under `src/test/...`.
