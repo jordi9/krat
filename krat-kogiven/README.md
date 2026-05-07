@@ -117,13 +117,13 @@ class OrderShould : ScenarioFunSpec<GivenOrder, WhenOrder, ThenOrder, OrderConte
 
 ## The Acceptance Testing Approach
 
-Kogiven is designed for component tests that sit at the center of the [testing honeycomb](https://engineering.atspotify.com/2018/01/testing-of-microservices/):
+Kogiven is designed for acceptance tests that sit at the center of the [testing honeycomb](https://engineering.atspotify.com/2018/01/testing-of-microservices/):
 
 ```
        ┌─────────────────┐
        │   E2E (few)     │
        ├─────────────────┤
-  ████████████████████████  ← Component tests (primary)
+  ████████████████████████  ← Acceptance tests (primary)
        ├─────────────────┤
        │  Unit (sparse)  │
        └─────────────────┘
@@ -134,7 +134,7 @@ The key idea: tests exercise the full application stack (HTTP handlers, use case
 ### What Makes a Good Acceptance Test
 
 - **Same code as production** — no test-only modules or conditional logic
-- **Real database** — in-memory SQLite/H2, not mocked
+- **Real database** — in-memory or dockerized databases, same as production
 - **External ports stubbed** — HTTP clients, notification services, file systems
 - **Test through the public API** — HTTP requests in, HTTP responses out
 - **Scenarios read like specs** — anyone can understand what's being tested
@@ -147,4 +147,4 @@ The key idea: tests exercise the full application stack (HTTP handlers, use case
 
 ## Examples
 
-See [KogivenStringSpecShould.kt](src/test/kotlin/com/jordi9/kogiven/KogivenStringSpecShould.kt) and [KogivenSpecificStages.kt](src/test/kotlin/com/jordi9/kogiven/KogivenSpecificStages.kt).
+See [KogivenStringSpecShould.kt](src/test/kotlin/com/jordi9/kogiven/KogivenStringSpecShould.kt) and [KogivenStages.kt](src/test/kotlin/com/jordi9/kogiven/KogivenStages.kt).
