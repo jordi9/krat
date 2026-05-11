@@ -30,5 +30,9 @@ dependencies {
   testImplementation(libs.ktor.server.test.host)
   testImplementation(libs.logback)
   testImplementation(libs.opentelemetry.ktor)
+  testImplementation(libs.opentelemetry.proto)
+  testImplementation(libs.grpc.netty.shaded)
+  testImplementation(libs.grpc.protobuf)
+  testImplementation(libs.grpc.stub)
   testImplementation(project(":krat-logging-testlib"))
 }

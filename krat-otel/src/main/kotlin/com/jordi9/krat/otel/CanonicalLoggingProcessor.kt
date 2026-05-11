@@ -70,12 +70,13 @@ class CanonicalLoggingProcessor(
 
   override fun forceFlush(): CompletableResultCode {
     if (logFormatter == null) return CompletableResultCode.ofSuccess()
+
     traces.cleanUp()
 
-    val tracesSnapshot = traces.asMap()
     // Snapshot keys, then atomically remove-and-emit each entry via compute so that
     // a concurrent onEnd adding spans to the same trace either lands before our compute
     // (gets included) or creates a fresh entry afterward (left for the next flush).
+    val tracesSnapshot = traces.asMap()
     for (traceId in tracesSnapshot.keys.toList()) {
       tracesSnapshot.compute(traceId) { _, spans ->
         if (spans != null) logFormatter.logOrphan(spans, traceId)

@@ -57,12 +57,18 @@ class OpenTelemetryProvider(
   }
 }
 
-private fun defaultSpanProcessor(config: OpenTelemetryConfig): SpanProcessor = if (config.otlpEnabled) {
-  BatchSpanProcessor.builder(
-    OtlpGrpcSpanExporter.builder().setEndpoint(config.otlpEndpoint).build()
-  ).build()
-} else {
-  SpanProcessor.composite()
+private fun defaultSpanProcessor(config: OpenTelemetryConfig): SpanProcessor {
+  val canonical = CanonicalLoggingProcessor(config.logFormat)
+  return if (config.otlpEnabled) {
+    SpanProcessor.composite(
+      canonical,
+      BatchSpanProcessor.builder(
+        OtlpGrpcSpanExporter.builder().setEndpoint(config.otlpEndpoint).build()
+      ).build()
+    )
+  } else {
+    canonical
+  }
 }
 
 @Serializable
