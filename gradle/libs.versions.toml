@@ -3,8 +3,8 @@ kotlin = "2.3.21"
 ktor = "3.5.0"
 kotest = "6.1.11"
 micrometer = "1.16.5"
-opentelemetry = "1.61.0"
-grpc = "1.73.0"
+opentelemetry = "1.62.0"
+grpc = "1.81.0"
 jdbi = "3.53.0"
 
 [libraries]
@@ -14,15 +14,15 @@ ktor-server-cors = { module = "io.ktor:ktor-server-cors" }
 ktor-server-sse = { module = "io.ktor:ktor-server-sse" }
 ktor-server-test-host = { module = "io.ktor:ktor-server-test-host-jvm" }
 ktor-client-core = { module = "io.ktor:ktor-client-core" }
-ktor-redoc = "io.github.smiley4:ktor-redoc:5.4.0"
+ktor-redoc = "io.github.smiley4:ktor-redoc:5.7.0"
 
 kotest-bom = { module = "io.kotest:kotest-bom", version.ref = "kotest" }
 kotest-runner-junit5 = { module = "io.kotest:kotest-runner-junit5" }
 kotest-assertions-core = { module = "io.kotest:kotest-assertions-core" }
 
 kotlin-logging = "io.github.oshai:kotlin-logging-jvm:8.0.02"
-slf4j-api = "org.slf4j:slf4j-api:2.0.17"
-slf4j-jul = "org.slf4j:jul-to-slf4j:2.0.17"
+slf4j-api = "org.slf4j:slf4j-api:2.0.18"
+slf4j-jul = "org.slf4j:jul-to-slf4j:2.0.18"
 logback = "ch.qos.logback:logback-classic:1.5.32"
 
 micrometer-bom = { module = "io.micrometer:micrometer-bom", version.ref = "micrometer" }
@@ -34,9 +34,9 @@ opentelemetry-sdk = { module = "io.opentelemetry:opentelemetry-sdk" }
 opentelemetry-extension-kotlin = { module = "io.opentelemetry:opentelemetry-extension-kotlin" }
 opentelemetry-sdk-testing = { module = "io.opentelemetry:opentelemetry-sdk-testing" }
 opentelemetry-exporter-otlp = { module = "io.opentelemetry:opentelemetry-exporter-otlp" }
-opentelemetry-semconv = "io.opentelemetry.semconv:opentelemetry-semconv:1.41.0"
+opentelemetry-semconv = "io.opentelemetry.semconv:opentelemetry-semconv:1.41.1"
 opentelemetry-ktor = "io.opentelemetry.instrumentation:opentelemetry-ktor-3.0:2.27.0-alpha"
-opentelemetry-proto = "io.opentelemetry.proto:opentelemetry-proto:1.7.0-alpha"
+opentelemetry-proto = "io.opentelemetry.proto:opentelemetry-proto:1.10.0-alpha"
 grpc-netty-shaded = { module = "io.grpc:grpc-netty-shaded", version.ref = "grpc" }
 grpc-protobuf = { module = "io.grpc:grpc-protobuf", version.ref = "grpc" }
 grpc-stub = { module = "io.grpc:grpc-stub", version.ref = "grpc" }
@@ -48,11 +48,11 @@ jdbi-opentelemetry = { module = "org.jdbi:jdbi3-opentelemetry" }
 hikari = "com.zaxxer:HikariCP:7.0.2"
 
 caffeine = "com.github.ben-manes.caffeine:caffeine:3.2.4"
-kotlinx-coroutines-core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2"
+kotlinx-coroutines-core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0"
 kotlinx-serialization-json = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.11.0"
 sqlite-jdbc = "org.xerial:sqlite-jdbc:3.53.1.0"
 
-kaml = "com.charleskorn.kaml:kaml:0.61.0"
+kaml = "com.charleskorn.kaml:kaml:0.104.0"
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
