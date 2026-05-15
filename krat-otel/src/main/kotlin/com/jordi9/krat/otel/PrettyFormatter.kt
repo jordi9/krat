@@ -51,7 +51,7 @@ private fun header(rootSpan: SpanData, traceId: TraceId): String {
       "${serverSymbol(status)} [$method $displayRoute] ($statusHint) ${durationMs}ms | ${traceId.value}"
     }
 
-    SpanKind.CONSUMER -> {
+    SpanKind.CONSUMER, SpanKind.INTERNAL -> {
       val isError = rootSpan.status.statusCode == StatusCode.ERROR
       val symbol = if (isError) "✗" else "✓"
       "$symbol [${rootSpan.name}] ${if (isError) "ERROR" else "OK"} ${durationMs}ms | ${traceId.value}"
