@@ -20,7 +20,7 @@ internal class LogfmtFormatter : LogFormatter {
       MDC.put("trace_id", traceId.value)
       MDC.put("duration_ms", rootSpan.durationMs.toString())
 
-      if (rootSpan.kind == SpanKind.CONSUMER) {
+      if (rootSpan.kind == SpanKind.CONSUMER || rootSpan.kind == SpanKind.INTERNAL) {
         val isError = rootSpan.status.statusCode == StatusCode.ERROR
         MDC.put("outcome", if (isError) "ERROR" else "OK")
       }

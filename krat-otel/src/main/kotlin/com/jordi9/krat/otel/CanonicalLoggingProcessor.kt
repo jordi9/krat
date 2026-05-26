@@ -53,7 +53,7 @@ class CanonicalLoggingProcessor(
       (existing ?: CopyOnWriteArrayList()).also { it.add(data) }
     }
 
-    if (span.kind == SpanKind.SERVER || span.kind == SpanKind.CONSUMER) {
+    if (data.isTraceRoot()) {
       val collected = traces.asMap().remove(traceId) ?: return
       val children = collected
         .filter { it.spanContext.spanId != data.spanContext.spanId }
@@ -85,6 +85,15 @@ class CanonicalLoggingProcessor(
     }
     return CompletableResultCode.ofSuccess()
   }
+}
+
+private fun SpanData.isTraceRoot(): Boolean = when (kind) {
+  SpanKind.SERVER, SpanKind.CONSUMER -> true
+
+  SpanKind.INTERNAL -> !parentSpanContext.isValid
+
+  // root internal trace, eg: startup trace
+  else -> false
 }
 
 private fun SpanData.toLevel(): Level = when (this.kind) {

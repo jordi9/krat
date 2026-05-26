@@ -299,6 +299,26 @@ class CanonicalLoggingProcessorTest : StringSpec({
     }
   }
 
+  "LOGFMT root INTERNAL span is logged immediately (e.g. startup trace)" {
+    val processor = CanonicalLoggingProcessor(format = LogFormat.LOGFMT)
+    OpenTelemetryProvider(
+      config = OpenTelemetryConfig(serviceName = "test-service", logFormat = LogFormat.LOGFMT),
+      spanProcessor = processor
+    ).use { provider ->
+      val tracer = provider.get().getTracer("test")
+
+      tracer.spanBuilder("app.startup").setSpanKind(SpanKind.INTERNAL).startSpan().end()
+
+      with(logs.events.single()) {
+        level shouldBe Level.INFO
+        mdcPropertyMap["name"] shouldBe "app.startup"
+        mdcPropertyMap["outcome"] shouldBe "OK"
+        mdcPropertyMap shouldContainKey "trace_id"
+        mdcPropertyMap shouldContainKey "duration_ms"
+      }
+    }
+  }
+
   "orphan trace logged on timeout and on forceFlush" {
     val ticker = TestTicker()
     val processor = CanonicalLoggingProcessor(
@@ -312,8 +332,7 @@ class CanonicalLoggingProcessorTest : StringSpec({
     ).use { provider ->
       val tracer = provider.get().getTracer("test")
 
-      // forceFlush drains in-flight orphans before timeout
-      tracer.spanBuilder("inflight.work").setSpanKind(SpanKind.INTERNAL).startSpan().end()
+      tracer.spanBuilder("inflight.work").setSpanKind(SpanKind.CLIENT).startSpan().end()
       logs.events.shouldBeEmpty()
       processor.forceFlush()
 
@@ -324,7 +343,7 @@ class CanonicalLoggingProcessorTest : StringSpec({
       }
 
       // expireAfterWrite triggers orphan via the eviction listener
-      tracer.spanBuilder("orphan.work").setSpanKind(SpanKind.INTERNAL).startSpan().end()
+      tracer.spanBuilder("orphan.work").setSpanKind(SpanKind.CLIENT).startSpan().end()
       ticker.advance(Duration.ofMinutes(6))
       processor.forceFlush()
 
