@@ -18,6 +18,7 @@ BUMP_TYPE=""
 MODULES=(
   "krat-pack-core"
   "krat-pack-cors"
+  "krat-pack-otel"
   "krat-otel"
   "krat-logging"
   "krat-time"
@@ -264,8 +265,8 @@ confirm_release() {
     return 0
   fi
 
-  read -rp "Proceed with release? (y/N): " confirm
-  [[ "$confirm" =~ ^[Yy]$ ]]
+  read -rp "Proceed with release? (Y/n): " confirm
+  [[ ! "$confirm" =~ ^[Nn]$ ]]
 }
 
 create_and_push_tags() {

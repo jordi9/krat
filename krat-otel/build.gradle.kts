@@ -20,7 +20,7 @@ dependencies {
   implementation(libs.caffeine)
   implementation(libs.slf4j.api)
   implementation(libs.slf4j.jul)
-  compileOnly(libs.logback)
+  implementation(libs.logback)
 
   testImplementation(platform(libs.kotest.bom))
   testImplementation(platform(libs.ktor.bom))
@@ -28,7 +28,6 @@ dependencies {
   testImplementation(libs.kotest.assertions.core)
   testImplementation(libs.opentelemetry.sdk.testing)
   testImplementation(libs.ktor.server.test.host)
-  testImplementation(libs.logback)
   testImplementation(libs.opentelemetry.ktor)
   testImplementation(libs.opentelemetry.proto)
   testImplementation(libs.grpc.netty.shaded)
