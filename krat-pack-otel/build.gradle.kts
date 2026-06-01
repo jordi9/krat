@@ -11,9 +11,6 @@ dependencies {
   api(platform(libs.ktor.bom))
   api(libs.ktor.server.core)
 
-  testImplementation(platform(libs.kotest.bom))
-  testImplementation(libs.kotest.runner.junit5)
-  testImplementation(libs.kotest.assertions.core)
   testImplementation(libs.ktor.server.test.host)
   testImplementation(project(":krat-otel-testlib"))
 }

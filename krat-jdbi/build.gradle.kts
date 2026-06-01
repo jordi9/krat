@@ -20,9 +20,6 @@ dependencies {
   api(libs.kotlinx.serialization.json)
   api(libs.opentelemetry.api)
 
-  testImplementation(platform(libs.kotest.bom))
-  testImplementation(libs.kotest.runner.junit5)
-  testImplementation(libs.kotest.assertions.core)
   testImplementation(libs.sqlite.jdbc)
   testImplementation(libs.opentelemetry.sdk)
   testImplementation(libs.logback)

@@ -12,6 +12,4 @@ dependencies {
   implementation(libs.logback)
 
   implementation(project(":krat-logging"))
-
-  testImplementation(libs.kotest.assertions.core)
 }

@@ -1,6 +1,7 @@
 plugins {
   kotlin("jvm")
   id("com.diffplug.spotless")
+  id("krat.testing")
 }
 
 spotless {
@@ -26,8 +27,3 @@ tasks.register("ktlintCheck") {
   dependsOn("spotlessCheck")
 }
 
-tasks.withType<Test>().configureEach {
-  useJUnitPlatform()
-  jvmArgs("--enable-native-access=ALL-UNNAMED")
-  testLogging { events("PASSED", "SKIPPED", "FAILED") }
-}

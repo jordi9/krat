@@ -22,10 +22,7 @@ dependencies {
   implementation(libs.slf4j.jul)
   implementation(libs.logback)
 
-  testImplementation(platform(libs.kotest.bom))
   testImplementation(platform(libs.ktor.bom))
-  testImplementation(libs.kotest.runner.junit5)
-  testImplementation(libs.kotest.assertions.core)
   testImplementation(libs.opentelemetry.sdk.testing)
   testImplementation(libs.ktor.server.test.host)
   testImplementation(libs.opentelemetry.ktor)

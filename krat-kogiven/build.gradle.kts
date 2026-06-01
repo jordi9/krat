@@ -9,6 +9,4 @@ description = "Kotest BDD extensions for scenario-based testing"
 dependencies {
   implementation(platform(libs.kotest.bom))
   implementation(libs.kotest.runner.junit5)
-
-  testImplementation(libs.kotest.assertions.core)
 }
