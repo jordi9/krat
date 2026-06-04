@@ -14,6 +14,8 @@ import kotlinx.serialization.json.long
 class JsonResponse(body: String) {
   private val element = Json.parseToJsonElement(body)
 
+  val keys: Set<String> get() = element.jsonObject.keys
+
   fun string(key: String): String =
     stringOrNull(key) ?: throw NoSuchElementException("Key $key is missing in the object.")
 
@@ -37,6 +39,8 @@ class JsonResponse(body: String) {
 }
 
 class JsonItem(private val obj: JsonObject) {
+  val keys: Set<String> get() = obj.keys
+
   fun string(key: String): String = obj.getValue(key).jsonPrimitive.content
 
   fun stringOrNull(key: String): String? {
@@ -48,6 +52,8 @@ class JsonItem(private val obj: JsonObject) {
   fun int(key: String): Int = obj.getValue(key).jsonPrimitive.int
 
   fun long(key: String): Long = obj.getValue(key).jsonPrimitive.long
+
+  fun obj(key: String): JsonItem = JsonItem(obj.getValue(key).jsonObject)
 }
 
 suspend fun HttpResponse.toJsonResponse() = JsonResponse(this.bodyAsText())

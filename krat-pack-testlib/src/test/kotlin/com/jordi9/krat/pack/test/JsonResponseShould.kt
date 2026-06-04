@@ -34,6 +34,26 @@ class JsonResponseShould : StringSpec({
     item.int("count") shouldBe 3
   }
 
+  "list root object keys" {
+    val response = JsonResponse("""{"name": "Widget", "count": 3}""")
+    response.keys shouldBe setOf("name", "count")
+  }
+
+  "list nested object keys" {
+    val response = JsonResponse("""{"item": {"name": "Widget", "count": 3}}""")
+    response.obj("item").keys shouldBe setOf("name", "count")
+  }
+
+  "traverse nested JsonItem objects" {
+    val response = JsonResponse("""{"item": {"details": {"sku": "W-1"}}}""")
+    response.obj("item").obj("details").string("sku") shouldBe "W-1"
+  }
+
+  "list empty object keys" {
+    JsonResponse("""{}""").keys shouldBe emptySet()
+    JsonResponse("""{"item": {}}""").obj("item").keys shouldBe emptySet()
+  }
+
   "parse array of items" {
     val response = JsonResponse("""[{"name": "A"}, {"name": "B"}]""")
     response.items().size shouldBe 2
