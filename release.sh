@@ -79,18 +79,118 @@ bump_version() {
   esac
 }
 
+is_ignored_release_path() {
+  local module=$1
+  local path=$2
+  local rel="${path#${module}/}"
+
+  case "$rel" in
+    README.md|CHANGELOG.md|LICENSE|LICENSE.md|docs/*|src/test/*|src/*Test/*|src/androidTest/*)
+      return 0
+      ;;
+  esac
+
+  # Ignore top-level markdown docs, but not markdown packaged under src/main.
+  if [[ "$rel" != */* && "$rel" == *.md ]]; then
+    return 0
+  fi
+
+  return 1
+}
+
+is_release_relevant_build_change() {
+  local commit=$1
+  local path=$2
+  local changed_line
+  local test_dependency_regex='^[[:space:]]*(test|androidTest|testFixtures)[[:alnum:]_]*[[:space:]]*\('
+  local test_task_regex='^[[:space:]]*(tasks\.)?test[[:space:]]*(\{|$)'
+  local junit_regex='^[[:space:]]*useJUnitPlatform[[:space:]]*\('
+
+  while IFS= read -r changed_line; do
+    case "$changed_line" in
+      +++*|---*) continue ;;
+      +*|-*) ;;
+      *) continue ;;
+    esac
+
+    changed_line="${changed_line:1}"
+
+    [[ "$changed_line" =~ ^[[:space:]]*$ ]] && continue
+    [[ "$changed_line" =~ ^[[:space:]]*// ]] && continue
+    [[ "$changed_line" =~ $test_dependency_regex ]] && continue
+    [[ "$changed_line" =~ $test_task_regex ]] && continue
+    [[ "$changed_line" =~ $junit_regex ]] && continue
+
+    return 0
+  done < <(git show --format= --unified=0 "$commit" -- "$path")
+
+  return 1
+}
+
+is_release_relevant_path() {
+  local commit=$1
+  local module=$2
+  local path=$3
+  local rel="${path#${module}/}"
+
+  if is_ignored_release_path "$module" "$path"; then
+    return 1
+  fi
+
+  case "$rel" in
+    src/main/*|src/commonMain/*|src/jvmMain/*|src/jsMain/*|src/nativeMain/*|src/androidMain/*)
+      return 0
+      ;;
+    build.gradle|build.gradle.kts)
+      is_release_relevant_build_change "$commit" "$path"
+      return $?
+      ;;
+    gradle.properties|pom.xml)
+      return 0
+      ;;
+  esac
+
+  # Be conservative for unknown non-doc/test files inside a module.
+  return 0
+}
+
+commit_has_release_relevant_changes() {
+  local commit=$1
+  local module=$2
+  local path
+
+  while IFS= read -r path; do
+    [[ -z "$path" ]] && continue
+
+    if is_release_relevant_path "$commit" "$module" "$path"; then
+      return 0
+    fi
+  done < <(git diff-tree --root --no-commit-id --name-only -r "$commit" -- "${module}/")
+
+  return 1
+}
+
 get_unreleased_commit_count() {
   local module=$1
-  local version
+  local version range commit count
   version=$(get_latest_version "$module")
+  count=0
 
   if [[ "$version" == "none" || -z "$version" ]]; then
-    # Never released - count all commits touching this module
-    git rev-list --count HEAD -- "${module}/" 2>/dev/null || echo "0"
+    range="HEAD"
   else
-    # Count commits since last tag
-    git rev-list --count "${module}/v${version}..HEAD" -- "${module}/" 2>/dev/null || echo "0"
+    range="${module}/v${version}..HEAD"
   fi
+
+  # Count commits that may require a new published artifact. Docs, test sources,
+  # and test-only build.gradle changes are intentionally ignored.
+  while IFS= read -r commit; do
+    if commit_has_release_relevant_changes "$commit" "$module"; then
+      ((count += 1))
+    fi
+  done < <(git rev-list "$range" -- "${module}/" 2>/dev/null || true)
+
+  echo "$count"
 }
 
 print_header() {
@@ -118,9 +218,9 @@ print_modules() {
     commit_count=$(get_unreleased_commit_count "$module")
     if [[ "$commit_count" -gt 0 ]]; then
       if [[ "$commit_count" -eq 1 ]]; then
-        status="${CYAN}* (1 commit)${NC}"
+        status="${CYAN}* (1 release commit)${NC}"
       else
-        status="${CYAN}* (${commit_count} commits)${NC}"
+        status="${CYAN}* (${commit_count} release commits)${NC}"
       fi
     else
       status=""
