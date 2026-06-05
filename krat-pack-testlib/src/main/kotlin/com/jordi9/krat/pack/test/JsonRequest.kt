@@ -5,7 +5,7 @@ import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
 
-fun HttpRequestBuilder.setJsonBody(body: String) {
+fun HttpRequestBuilder.jsonBody(body: String) {
   contentType(ContentType.Application.Json)
   setBody(body.trimIndent())
 }

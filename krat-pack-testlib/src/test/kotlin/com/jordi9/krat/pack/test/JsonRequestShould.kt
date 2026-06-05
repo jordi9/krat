@@ -30,7 +30,7 @@ class JsonRequestShould : StringSpec({
       }
 
       val response = client.post("/items") {
-        setJsonBody(
+        jsonBody(
           """
             {
               "name": "Cash"
