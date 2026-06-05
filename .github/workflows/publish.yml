@@ -48,7 +48,16 @@ jobs:
         uses: orhun/git-cliff-action@v4
         id: notes
         with:
-          args: --include-path "${{ steps.parse.outputs.library }}/**"
+          args: >-
+            --latest
+            --tag-pattern "^${{ steps.parse.outputs.library }}/v.*"
+            --include-path "${{ steps.parse.outputs.library }}/**"
+            --exclude-path "${{ steps.parse.outputs.library }}/*.md"
+            --exclude-path "${{ steps.parse.outputs.library }}/LICENSE*"
+            --exclude-path "${{ steps.parse.outputs.library }}/docs/**"
+            --exclude-path "${{ steps.parse.outputs.library }}/src/test/**"
+            --exclude-path "${{ steps.parse.outputs.library }}/src/*Test/**"
+            --exclude-path "${{ steps.parse.outputs.library }}/src/androidTest/**"
 
       - name: Create GitHub Release
         env:
