@@ -10,7 +10,7 @@ fun Application.installCors(config: CorsConfig) {
   install(CORS) {
     config.allowedHosts.forEach { allowHost(it) }
     if (config.allowAnyLocalhost) {
-      allowOrigins { it.startsWith("http://localhost:") }
+      allowOrigins(::isLocalhost)
     }
     allowMethod(HttpMethod.Options)
     allowMethod(HttpMethod.Patch)
@@ -18,3 +18,9 @@ fun Application.installCors(config: CorsConfig) {
     allowHeader(HttpHeaders.ContentType)
   }
 }
+
+private fun isLocalhost(origin: String): Boolean = isLocalhost(origin, "localhost") ||
+  isLocalhost(origin, "127.0.0.1")
+
+private fun isLocalhost(origin: String, host: String): Boolean = origin.startsWith("http://$host:") ||
+  origin.startsWith("https://$host:")

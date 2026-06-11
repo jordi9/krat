@@ -16,9 +16,9 @@ dependencies {
 fun Application.module() {
     installCors(CorsConfig(
         allowedHosts = listOf("example.com", "api.example.com"),
-        allowAnyLocalhost = true  // Allow localhost:* for development
+        allowAnyLocalhost = true  // Allow localhost:* and 127.0.0.1:* for development
     ))
 }
 ```
 
-The `allowAnyLocalhost` option allows any `localhost:*` origin while rejecting malicious lookalikes like `localhost.evil.com`.
+The `allowAnyLocalhost` option allows any `localhost:*` or `127.0.0.1:*` origin over HTTP or HTTPS while rejecting malicious lookalikes like `localhost.evil.com`.
