@@ -1,9 +1,9 @@
 [versions]
 kotlin = "2.3.21"
-ktor = "3.5.0"
+ktor = "3.6.0"
 kotest = "6.1.11"
 micrometer = "1.16.5"
-opentelemetry = "1.61.0"
+opentelemetry = "1.66.0"
 grpc = "1.73.0"
 jdbi = "3.53.0"
 
@@ -34,9 +34,9 @@ opentelemetry-sdk = { module = "io.opentelemetry:opentelemetry-sdk" }
 opentelemetry-extension-kotlin = { module = "io.opentelemetry:opentelemetry-extension-kotlin" }
 opentelemetry-sdk-testing = { module = "io.opentelemetry:opentelemetry-sdk-testing" }
 opentelemetry-exporter-otlp = { module = "io.opentelemetry:opentelemetry-exporter-otlp" }
-opentelemetry-semconv = "io.opentelemetry.semconv:opentelemetry-semconv:1.41.0"
-opentelemetry-ktor = "io.opentelemetry.instrumentation:opentelemetry-ktor-3.0:2.27.0-alpha"
-opentelemetry-proto = "io.opentelemetry.proto:opentelemetry-proto:1.7.0-alpha"
+opentelemetry-semconv = "io.opentelemetry.semconv:opentelemetry-semconv:1.44.0"
+opentelemetry-ktor = "io.opentelemetry.instrumentation:opentelemetry-ktor-3.0:2.31.1-alpha"
+opentelemetry-proto = "io.opentelemetry.proto:opentelemetry-proto:1.11.0-alpha"
 grpc-netty-shaded = { module = "io.grpc:grpc-netty-shaded", version.ref = "grpc" }
 grpc-protobuf = { module = "io.grpc:grpc-protobuf", version.ref = "grpc" }
 grpc-stub = { module = "io.grpc:grpc-stub", version.ref = "grpc" }
