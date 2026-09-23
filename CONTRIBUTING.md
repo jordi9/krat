@@ -29,7 +29,7 @@ Keep PRs small and focused. One concern per PR.
 
 ### Adding a new module
 
-Follow the structure in [CLAUDE.md](CLAUDE.md#adding-a-new-module). Every module should be small enough that someone could read and understand it in a few minutes.
+Follow the structure in [AGENTS.md](AGENTS.md#adding-a-module). Every module should be small enough that someone could read and understand it in a few minutes.
 
 ## Code style
 
