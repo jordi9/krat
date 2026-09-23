@@ -7,7 +7,9 @@ import ch.qos.logback.classic.encoder.PatternLayoutEncoder
 import ch.qos.logback.classic.pattern.ClassicConverter
 import ch.qos.logback.classic.spi.ILoggingEvent
 import ch.qos.logback.core.ConsoleAppender
+import ch.qos.logback.core.pattern.DynamicConverter
 import org.slf4j.LoggerFactory
+import java.util.function.Supplier
 
 internal fun configureLogfmt() {
   val rootLogger = LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME) as Logger
@@ -17,7 +19,8 @@ internal fun configureLogfmt() {
 }
 
 internal fun buildLogfmtEncoder(): PatternLayoutEncoder {
-  PatternLayout.DEFAULT_CONVERTER_MAP[MDC_CONVERTER_KEY] = LogfmtMdcConverter::class.java.name
+  PatternLayout.DEFAULT_CONVERTER_SUPPLIER_MAP[MDC_CONVERTER_KEY] =
+    Supplier<DynamicConverter<*>> { LogfmtMdcConverter() }
   return PatternLayoutEncoder().apply {
     context = LoggerFactory.getILoggerFactory() as? LoggerContext
     pattern = LOGFMT_PATTERN
