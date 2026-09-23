@@ -13,6 +13,8 @@ NC='\033[0m' # No Color
 DRY_RUN=false
 BATCH_MODE=false
 BUMP_TYPE=""
+JJ_REPO=false
+RELEASE_REF="HEAD"
 
 # Available modules (order matters for display)
 MODULES=(
@@ -177,9 +179,9 @@ get_unreleased_commit_count() {
   count=0
 
   if [[ "$version" == "none" || -z "$version" ]]; then
-    range="HEAD"
+    range="$RELEASE_REF"
   else
-    range="${module}/v${version}..HEAD"
+    range="${module}/v${version}..${RELEASE_REF}"
   fi
 
   # Count commits that may require a new published artifact. Docs, test sources,
@@ -381,10 +383,18 @@ create_and_push_tags() {
       echo -e "${CYAN}[DRY-RUN]${NC} Would push tag to origin"
     else
       echo -e "\n${BLUE}Creating tag ${tag}...${NC}"
-      git tag "$tag"
+      if [[ "$JJ_REPO" == true ]]; then
+        jj tag set -r main "$tag"
+      else
+        git tag "$tag"
+      fi
 
       echo -e "${BLUE}Pushing tag to origin...${NC}"
-      git push origin "$tag"
+      if [[ "$JJ_REPO" == true ]]; then
+        jj git push --remote origin --tag "$tag"
+      else
+        git push origin "$tag"
+      fi
 
       echo -e "${GREEN}✓ Released ${tag}${NC}"
     fi
@@ -401,8 +411,14 @@ create_and_push_tags() {
 }
 
 check_prerequisites() {
-  # Check for clean working directory
-  if [[ -n $(git status --porcelain) ]]; then
+  local changes current_branch main_commit working_commit parent_commit
+
+  if [[ "$JJ_REPO" == true ]]; then
+    changes=$(jj diff --summary)
+  else
+    changes=$(git status --porcelain)
+  fi
+  if [[ -n "$changes" ]]; then
     echo -e "${YELLOW}Warning: Working directory is not clean.${NC}"
     read -rp "Continue anyway? (Y/n): " confirm
     if [[ "$confirm" =~ ^[Nn]$ ]]; then
@@ -410,14 +426,27 @@ check_prerequisites() {
     fi
   fi
 
-  # Check we're on main branch
-  local current_branch
-  current_branch=$(git branch --show-current)
-  if [[ "$current_branch" != "main" ]]; then
-    echo -e "${YELLOW}Warning: You're on branch '${current_branch}', not 'main'.${NC}"
-    read -rp "Continue anyway? (y/N): " confirm
-    if [[ ! "$confirm" =~ ^[Yy]$ ]]; then
-      exit 0
+  if [[ "$JJ_REPO" == true ]]; then
+    # An ordinary jj working copy is a new, empty change on top of main.
+    # Git sees a detached HEAD there, so compare revisions instead of branches.
+    main_commit=$(jj log --no-graph -r main -T 'commit_id')
+    working_commit=$(jj log --no-graph -r @ -T 'commit_id')
+    parent_commit=$(jj log --no-graph -r '@-' -T 'commit_id')
+    if [[ "$main_commit" != "$working_commit" && "$main_commit" != "$parent_commit" ]]; then
+      echo -e "${YELLOW}Warning: Working copy is not based on the main bookmark. Tags will point to main.${NC}"
+      read -rp "Continue anyway? (y/N): " confirm
+      if [[ ! "$confirm" =~ ^[Yy]$ ]]; then
+        exit 0
+      fi
+    fi
+  else
+    current_branch=$(git branch --show-current)
+    if [[ "$current_branch" != "main" ]]; then
+      echo -e "${YELLOW}Warning: You're on branch '${current_branch}', not 'main'.${NC}"
+      read -rp "Continue anyway? (y/N): " confirm
+      if [[ ! "$confirm" =~ ^[Yy]$ ]]; then
+        exit 0
+      fi
     fi
   fi
 }
@@ -532,6 +561,11 @@ parse_args() {
 # Main flow
 main() {
   parse_args "$@"
+  if jj root >/dev/null 2>&1; then
+    JJ_REPO=true
+    # Use the same commit for release counts and the eventual tag.
+    RELEASE_REF=$(jj log --no-graph -r main -T 'commit_id')
+  fi
   print_header
   check_prerequisites
 
