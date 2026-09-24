@@ -28,6 +28,7 @@ Framework-agnostic building blocks.
 | Module | Description |
 |--------|-------------|
 | [krat-jdbi](krat-jdbi/) | JDBI provider with HikariCP, Micrometer, and Loom support |
+| [krat-flyway](krat-flyway/) | Explicit Flyway migrations and pending migration inspection |
 | [krat-logging](krat-logging/) | KotlinLogging typealias |
 | [krat-time](krat-time/) | TimeClock interface for testable time access |
 | [krat-gag](krat-gag/) | YOLO annotation |

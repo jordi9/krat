@@ -46,6 +46,7 @@ jdbi-core = { module = "org.jdbi:jdbi3-core" }
 jdbi-kotlin = { module = "org.jdbi:jdbi3-kotlin" }
 jdbi-opentelemetry = { module = "org.jdbi:jdbi3-opentelemetry" }
 hikari = "com.zaxxer:HikariCP:7.1.0"
+flyway-core = "org.flywaydb:flyway-core:12.6.1"
 
 caffeine = "com.github.ben-manes.caffeine:caffeine:3.2.4"
 kotlinx-coroutines-core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0"

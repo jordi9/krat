@@ -26,6 +26,7 @@ MODULES=(
   "krat-time"
   "krat-gag"
   "krat-jdbi"
+  "krat-flyway"
   "krat-logging-testlib"
   "krat-time-testlib"
   "krat-otel-testlib"
