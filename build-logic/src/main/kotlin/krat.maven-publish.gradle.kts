@@ -10,7 +10,9 @@ version = findProperty("version")?.toString()?.takeIf { it != "unspecified" } ?:
 
 mavenPublishing {
   publishToMavenCentral()
-  signAllPublications()
+  if (providers.environmentVariable("JITPACK").orNull != "true") {
+    signAllPublications()
+  }
 
   configure(KotlinJvm(
     javadocJar = JavadocJar.Empty(),

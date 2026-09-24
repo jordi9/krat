@@ -59,6 +59,32 @@ dependencies {
 
 See [Releases](https://github.com/jordi9/krat/releases) for versions.
 
+### JitPack
+
+JitPack can also build the repository from a commit or tag. Look up
+[`com.jordi9/krat`](https://jitpack.io/#com.jordi9/krat) and use the module coordinates
+shown by **Get it**. The custom domain changes the group prefix, not the download
+host; individual modules use the `com.jordi9.krat` group rather than Central's
+`com.jordi9`.
+
+```kotlin
+repositories {
+    mavenCentral()
+    maven("https://jitpack.io") {
+        content { includeGroup("com.jordi9.krat") }
+    }
+}
+
+dependencies {
+    implementation("com.jordi9.krat:krat-pack-core:$jitpackVersion")
+}
+```
+
+Use a commit hash for `jitpackVersion` to try a build without creating a release.
+JitPack builds all modules at that revision with one version; this is separate
+from Central's independent module releases. Its build runs tests and publishes
+to Maven Local for JitPack to collect, without requiring Central or GPG credentials.
+
 ## Releasing
 
 ### Using release.sh (Recommended)
