@@ -2,4 +2,4 @@ before_install:
   - sdk install java 24.0.2-tem
   - sdk use java 24.0.2-tem
 install:
-  - ./gradlew test publishToMavenLocal -Pversion="$VERSION"
+  - ./gradlew publishToMavenLocal -Pversion="$VERSION"

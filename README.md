@@ -82,8 +82,9 @@ dependencies {
 
 Use a commit hash for `jitpackVersion` to try a build without creating a release.
 JitPack builds all modules at that revision with one version; this is separate
-from Central's independent module releases. Its build runs tests and publishes
-to Maven Local for JitPack to collect, without requiring Central or GPG credentials.
+from Central's independent module releases. Its build compiles and packages the
+libraries without compiling or running tests, then publishes to Maven Local for
+JitPack to collect, without requiring Central or GPG credentials.
 
 ## Releasing
 
