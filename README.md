@@ -108,7 +108,13 @@ git tag krat-pack-core/v0.4.0
 git push origin krat-pack-core/v0.4.0
 ```
 
-CI publishes to Maven Central and creates a GitHub release.
+CI submits an automatic release to Maven Central and creates a GitHub release.
+Central validation/publication continues asynchronously; a successful workflow
+confirms submission, not final Central acceptance. Check the Central Portal for
+the deployment result.
+
+The workflow retains the signed Maven publication bundle as the
+`maven-publication` Actions artifact for 90 days.
 
 ## License
 

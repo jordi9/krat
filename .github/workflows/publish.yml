@@ -22,8 +22,8 @@ jobs:
           TAG=${GITHUB_REF#refs/tags/}
           LIBRARY=${TAG%/v*}
           VERSION=${TAG#*/v}
-          echo "library=$LIBRARY" >> $GITHUB_OUTPUT
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "library=$LIBRARY" >> "$GITHUB_OUTPUT"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
           echo "Publishing $LIBRARY version $VERSION"
 
       - uses: actions/setup-java@v5
@@ -34,15 +34,40 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v6
 
-      - name: Publish ${{ steps.parse.outputs.library }} to Maven Central
+      - name: Submit ${{ steps.parse.outputs.library }} to Maven Central
         run: |
-          ./gradlew :${{ steps.parse.outputs.library }}:publishAndReleaseToMavenCentral \
-            -Pversion=${{ steps.parse.outputs.version }}
+          ./gradlew ":${LIBRARY}:publishAndReleaseToMavenCentral" \
+            "-Pversion=${VERSION}" \
+            -PmavenCentralDeploymentValidation=NONE
         env:
+          LIBRARY: ${{ steps.parse.outputs.library }}
+          VERSION: ${{ steps.parse.outputs.version }}
           ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
           ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
           ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.GPG_SIGNING_KEY }}
           ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.GPG_SIGNING_PASSWORD }}
+
+      - name: Stage the exact Central publication bundle
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import shutil
+
+          bundles = list(Path("build/publish").glob("*.zip"))
+          if len(bundles) != 1:
+              raise SystemExit(f"Expected one Central bundle, found {len(bundles)}")
+          Path("build/publication").mkdir(parents=True, exist_ok=True)
+          shutil.copyfile(bundles[0], "build/publication/bundle.zip")
+          PY
+
+      - name: Save signed publication bundle
+        uses: actions/upload-artifact@v7
+        with:
+          name: maven-publication
+          path: build/publication/bundle.zip
+          if-no-files-found: error
+          retention-days: 90
+          compression-level: 0
 
       - name: Generate release notes
         uses: orhun/git-cliff-action@v4
