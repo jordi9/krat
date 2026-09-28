@@ -21,9 +21,9 @@ kotest-runner-junit5 = { module = "io.kotest:kotest-runner-junit5" }
 kotest-assertions-core = { module = "io.kotest:kotest-assertions-core" }
 
 kotlin-logging = "io.github.oshai:kotlin-logging-jvm:8.0.4"
-slf4j-api = "org.slf4j:slf4j-api:2.0.19"
-slf4j-jul = "org.slf4j:jul-to-slf4j:2.0.19"
-logback = "ch.qos.logback:logback-classic:1.6.3"
+slf4j-api = "org.slf4j:slf4j-api:2.0.20"
+slf4j-jul = "org.slf4j:jul-to-slf4j:2.0.20"
+logback = "ch.qos.logback:logback-classic:1.6.4"
 
 micrometer-bom = { module = "io.micrometer:micrometer-bom", version.ref = "micrometer" }
 micrometer-core = { module = "io.micrometer:micrometer-core" }
@@ -46,9 +46,9 @@ jdbi-core = { module = "org.jdbi:jdbi3-core" }
 jdbi-kotlin = { module = "org.jdbi:jdbi3-kotlin" }
 jdbi-opentelemetry = { module = "org.jdbi:jdbi3-opentelemetry" }
 hikari = "com.zaxxer:HikariCP:7.1.0"
-flyway-core = "org.flywaydb:flyway-core:12.6.1"
+flyway-core = "org.flywaydb:flyway-core:13.8.0"
 
-caffeine = "com.github.ben-manes.caffeine:caffeine:3.2.4"
+caffeine = "com.github.ben-manes.caffeine:caffeine:3.3.0"
 kotlinx-coroutines-core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0"
 kotlinx-serialization-json = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.11.0"
 sqlite-jdbc = "org.xerial:sqlite-jdbc:3.53.4.0"
