@@ -5,7 +5,7 @@ kotest = "6.2.5"
 micrometer = "1.17.1"
 opentelemetry = "1.66.0"
 grpc = "1.84.0"
-jdbi = "3.54.0"
+jdbi = "3.55.0"
 
 [libraries]
 ktor-bom = { module = "io.ktor:ktor-bom", version.ref = "ktor" }
@@ -21,9 +21,9 @@ kotest-runner-junit5 = { module = "io.kotest:kotest-runner-junit5" }
 kotest-assertions-core = { module = "io.kotest:kotest-assertions-core" }
 
 kotlin-logging = "io.github.oshai:kotlin-logging-jvm:8.0.4"
-slf4j-api = "org.slf4j:slf4j-api:2.0.19"
-slf4j-jul = "org.slf4j:jul-to-slf4j:2.0.19"
-logback = "ch.qos.logback:logback-classic:1.6.3"
+slf4j-api = "org.slf4j:slf4j-api:2.0.20"
+slf4j-jul = "org.slf4j:jul-to-slf4j:2.0.20"
+logback = "ch.qos.logback:logback-classic:1.6.5"
 
 micrometer-bom = { module = "io.micrometer:micrometer-bom", version.ref = "micrometer" }
 micrometer-core = { module = "io.micrometer:micrometer-core" }
@@ -36,7 +36,7 @@ opentelemetry-sdk-testing = { module = "io.opentelemetry:opentelemetry-sdk-testi
 opentelemetry-exporter-otlp = { module = "io.opentelemetry:opentelemetry-exporter-otlp" }
 opentelemetry-semconv = "io.opentelemetry.semconv:opentelemetry-semconv:1.44.0"
 opentelemetry-ktor = "io.opentelemetry.instrumentation:opentelemetry-ktor-3.0:2.31.1-alpha"
-opentelemetry-proto = "io.opentelemetry.proto:opentelemetry-proto:1.11.0-alpha"
+opentelemetry-proto = "io.opentelemetry.proto:opentelemetry-proto:1.11.1-alpha"
 grpc-netty-shaded = { module = "io.grpc:grpc-netty-shaded", version.ref = "grpc" }
 grpc-protobuf = { module = "io.grpc:grpc-protobuf", version.ref = "grpc" }
 grpc-stub = { module = "io.grpc:grpc-stub", version.ref = "grpc" }
@@ -46,9 +46,9 @@ jdbi-core = { module = "org.jdbi:jdbi3-core" }
 jdbi-kotlin = { module = "org.jdbi:jdbi3-kotlin" }
 jdbi-opentelemetry = { module = "org.jdbi:jdbi3-opentelemetry" }
 hikari = "com.zaxxer:HikariCP:7.1.0"
-flyway-core = "org.flywaydb:flyway-core:12.6.1"
+flyway-core = "org.flywaydb:flyway-core:13.9.0"
 
-caffeine = "com.github.ben-manes.caffeine:caffeine:3.2.4"
+caffeine = "com.github.ben-manes.caffeine:caffeine:3.3.0"
 kotlinx-coroutines-core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0"
 kotlinx-serialization-json = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.11.0"
 sqlite-jdbc = "org.xerial:sqlite-jdbc:3.53.4.0"
@@ -59,4 +59,4 @@ kaml = "com.charleskorn.kaml:kaml:0.104.0"
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 vanniktech-publish = { id = "com.vanniktech.maven.publish", version = "0.37.0" }
-spotless = { id = "com.diffplug.spotless", version = "8.10.2" }
+spotless = { id = "com.diffplug.spotless", version = "8.10.3" }
